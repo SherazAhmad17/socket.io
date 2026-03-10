@@ -22,6 +22,11 @@ export default function App() {
           console.log(`${userName} has joined room`)
         })
 
+        socket.current.on("sendMessage", (msg)=>{
+          console.log(msg,"here is res from backend")
+          setMessages((prev)=> [...prev , msg])
+        })
+
     });
 
   }, []);
@@ -61,6 +66,8 @@ export default function App() {
       ts: Date.now(),
     };
     setMessages((m) => [...m, msg]);
+
+    socket.current.emit("sendMessage", msg);
 
     setText("");
   }

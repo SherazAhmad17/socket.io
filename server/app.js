@@ -53,6 +53,10 @@ io.on("connection", (socket) => {
         // insted of io we use socket to brodcast to all except the sender
         socket.to(ROOM).emit("roomNotice", userName)
 
+        socket.on("sendMessage", (msg)=>{
+          socket.to(ROOM).emit("sendMessage", msg)
+        })
+
 
     })
 
