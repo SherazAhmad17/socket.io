@@ -16,9 +16,14 @@ export default function App() {
     socket.current = wsConnection();
 
     socket.current.on("connect", () => {
-
+      
+      // here we are sending  notification to the user that other has joined
+        socket.current.on("roomNotice" , (userName)=>{
+          console.log(`${userName} has joined room`)
+        })
 
     });
+
   }, []);
 
   // FORMAT TIMESTAMP TO HH:MM FOR MESSAGES

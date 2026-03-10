@@ -46,6 +46,13 @@ io.on("connection", (socket) => {
 
         await socket.join(ROOM)
 
+        // send notification to all 
+        // io.to(ROOM).emit("roomNotice", userName);
+
+        //for brodcasting to all except the sender
+        // insted of io we use socket to brodcast to all except the sender
+        socket.to(ROOM).emit("roomNotice", userName)
+
 
     })
 
