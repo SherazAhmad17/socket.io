@@ -7,29 +7,35 @@ export default function App() {
   const [userName, setUserName] = useState("");
   const [showNamePopup, setShowNamePopup] = useState(true);
   const [inputName, setInputName] = useState("");
-
+  const [typers, setTypers] = useState([]);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
 
   useEffect(() => {
-    
     socket.current = wsConnection();
 
     socket.current.on("connect", () => {
-      
       // here we are sending  notification to the user that other has joined
-        socket.current.on("roomNotice" , (userName)=>{
-          console.log(`${userName} has joined room`)
-        })
+      socket.current.on("roomNotice", (userName) => {
+        console.log(`${userName} has joined room`);
+      });
 
-        socket.current.on("sendMessage", (msg)=>{
-          console.log(msg,"here is res from backend")
-          setMessages((prev)=> [...prev , msg])
-        })
+      socket.current.on("sendMessage", (msg) => {
+        console.log(msg, "here is res from backend");
+        setMessages((prev) => [...prev, msg]);
+      });
 
+      socket.current.on("typing", ({ userName }) => {
+        setTypers((prev) => [...prev, userName]);
+      });
     });
-
   }, []);
+
+  useEffect(() => {
+    if (text) {
+      socket.current.emit("typing", { userName });
+    }
+  }, [text, userName]);
 
   // FORMAT TIMESTAMP TO HH:MM FOR MESSAGES
   function formatTime(ts) {
@@ -45,9 +51,7 @@ export default function App() {
     const trimmed = inputName.trim();
     if (!trimmed) return;
 
-
     socket.current.emit("JoinRoom", trimmed);
-
 
     setUserName(trimmed);
     setShowNamePopup(false);
@@ -124,13 +128,14 @@ export default function App() {
                 Sheraz Chat
               </div>
 
-              {/* {typers.length ? (
-                                <div className="text-xs text-gray-500">
-                                    {typers.join(', ')} is typing...
-                                </div>
-                            ) : (
-                                ''
-                            )} */}
+              {typers.length ? (
+                <div className="text-xs text-gray-500">
+                  {typers.join(", ")} is typing...
+                </div>
+              ) : (
+                ""
+              )}
+              
             </div>
             <div className="text-sm text-gray-500">
               Signed in as{" "}

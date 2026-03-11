@@ -57,6 +57,10 @@ io.on("connection", (socket) => {
           socket.to(ROOM).emit("sendMessage", msg)
         })
 
+        socket.on("typing", ({userName})=>{
+          socket.to(ROOM).emit("typing", {userName})
+        })
+
 
     })
 
