@@ -3,7 +3,7 @@ import { wsConnection } from "./ws.js";
 
 export default function App() {
   const socket = useRef(null);
-
+  const timer = useRef(null);
   const [userName, setUserName] = useState("");
   const [showNamePopup, setShowNamePopup] = useState(true);
   const [inputName, setInputName] = useState("");
@@ -47,13 +47,24 @@ export default function App() {
     if (text) {
       socket.current.emit("typing", { userName });
 
+      clearTimeout(timer.current)
+
       // remove the user
-      setTimeout(()=>{
+      
+
+
+      
+    }
+
+    timer.current = setTimeout(()=>{
 
         socket.current.emit("stopTyping" , userName);
 
       }, 1000)
-    }
+
+      return () => {
+        clearTimeout(timer.current)
+      }
   }, [text, userName]);
 
   // FORMAT TIMESTAMP TO HH:MM FOR MESSAGES
