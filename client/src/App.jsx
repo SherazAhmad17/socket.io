@@ -26,7 +26,15 @@ export default function App() {
       });
 
       socket.current.on("typing", ({ userName }) => {
-        setTypers((prev) => [...prev, userName]);
+        setTypers((prev) =>{ 
+
+          const isExist = prev.find((typer)=> typer === userName)
+
+          if(!isExist){
+           return [...prev, userName]
+          }
+          return prev
+        });
       });
     });
   }, []);
@@ -135,7 +143,7 @@ export default function App() {
               ) : (
                 ""
               )}
-              
+
             </div>
             <div className="text-sm text-gray-500">
               Signed in as{" "}
