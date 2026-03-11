@@ -61,6 +61,10 @@ io.on("connection", (socket) => {
           socket.to(ROOM).emit("typing", {userName})
         })
 
+        socket.on("stopTyping", (userName)=>{
+          socket.to(ROOM).emit("stopTyping", userName)
+        })
+
 
     })
 

@@ -36,12 +36,23 @@ export default function App() {
           return prev
         });
       });
+
+      socket.current.on("stopTyping", (userName)=>{
+        setTypers((prev)=> prev.filter((typer)=> typer !== userName))
+      })
     });
   }, []);
 
   useEffect(() => {
     if (text) {
       socket.current.emit("typing", { userName });
+
+      // remove the user
+      setTimeout(()=>{
+
+        socket.current.emit("stopTyping" , userName);
+
+      }, 1000)
     }
   }, [text, userName]);
 
