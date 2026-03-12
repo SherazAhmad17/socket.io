@@ -40,6 +40,14 @@ export default function App() {
       socket.current.on("stopTyping", (userName)=>{
         setTypers((prev)=> prev.filter((typer)=> typer !== userName))
       })
+
+      return () =>{
+        socket.current.off("roomNotice");
+        socket.current.off("sendMessage");
+        socket.current.off("typing");
+        socket.current.off("stopTyping");
+
+      }
     });
   }, []);
 
